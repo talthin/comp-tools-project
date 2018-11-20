@@ -1,30 +1,49 @@
-#!/usr/bin/python3
-"""
-
-	get_category_items.py
-	
-
-    MediaWiki Action API Code Samples
-    Demo of `Categorymembers` module : List twenty items in a category.
-    MIT license
-"""
-
 import requests
+import wikipedia
+import filter
+import wordCount
+from collections import defaultdict
 
-S = requests.Session()
+def getCategoryPageList(category, amount):
 
-URL = "https://en.wikipedia.org/w/api.php"
+    S = requests.Session()
 
-PARAMS = {
-    'action': "query",
-    'list': "categorymembers",
-    'cmtitle': "Category:Physics",
-    'cmlimit': 20,
-    'cmtype': "page",
-    'format': "json"
-}
+    URL = "https://en.wikipedia.org/w/api.php"
 
-R = S.get(url=URL, params=PARAMS)
-DATA = R.json()
+    PARAMS = {
+        'action': "query",
+        'list': "categorymembers",
+        'cmtitle': "Category:" + category,
+        'cmlimit': amount,
+        'cmtype': "page",
+        'format': "json"
+    }
 
-print(DATA)
+    R = S.get(url=URL, params=PARAMS)
+    DATA = R.json()
+
+    ### Get titles of wiki pages
+
+    wikiTitles = []
+    for i in range(len(DATA["query"]['categorymembers'])):
+        wikiTitles.append(DATA["query"]['categorymembers'][i]['title'])
+    return wikiTitles
+
+def writeWikipageToFile(wikiTitles, filename):
+    ### get single pages
+    bigWordList = []
+    for i in range(len(wikiTitles)):
+        wikiPage = wikipedia.page(wikiTitles[i])
+        wikiWordlist = filter.remove_all_but_words(wikiPage.content)
+        cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
+        for j in range(len(cleanWikiWordlist)):
+            bigWordList.append(cleanWikiWordlist[j])
+
+    ### write to file
+    file = open(filename + ".txt", "w")
+
+    for word in bigWordList:
+        file.write(str(word) + " ")
+
+    file.close()
+
