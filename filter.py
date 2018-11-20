@@ -5,7 +5,9 @@ from nltk.corpus import stopwords
 
 ### takes a string and removes digits and nonalpha characters
 def remove_all_but_words(word_string):
-    filtered_wordlist = re.sub(r'[^a-zA-Z ]', '', word_string).split()
+    withoutTitles = re.sub(r'==.*==', '', word_string)
+    filtered_wordlist = re.sub(r'[^a-zA-Z ]', '', withoutTitles).split()
+
     return filtered_wordlist
 
 ### takes a list of words and removes all stop words.
