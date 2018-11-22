@@ -4,6 +4,8 @@ import filter
 import wordCount
 from collections import defaultdict
 
+# Fetches a list of pages from wikipedia based on a category.
+# Category is the category which you want pages from and amount is the number of pages you want from that category.
 def getCategoryPageList(category, amount):
 
     S = requests.Session()
@@ -29,11 +31,15 @@ def getCategoryPageList(category, amount):
         wikiTitles.append(DATA["query"]['categorymembers'][i]['title'])
     return wikiTitles
 
+# removes symbols that are not words and stopwords
+# page, the wikipage that you want to filter
 def filterWikiData(page):
     wikiWordlist = filter.remove_all_but_words(page)
     cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
     return cleanWikiWordlist
 
+# takes a list of titles and fetches the content of those pages from wikipedia and filters the data and writes it to a local file
+# wikiTitles, the titles you want to fetch content from. filename, what you want the file to be namned
 def writeWikipageToFile(wikiTitles, filename):
     ### get single pages
     bigWordList = []
@@ -54,6 +60,9 @@ def writeWikipageToFile(wikiTitles, filename):
 
     file.close()
 
+
+# takes a list of titles and fetches the content of those pages from wikipedia and filters the data and converts it to a list
+# wikiTitles, the titles you want to fetch content from. category, just for labeling the list. 
 def createWikiList(wikiTitles, category):
     wikiList = []
     for i in range(len(wikiTitles)):
@@ -66,8 +75,8 @@ def createWikiList(wikiTitles, category):
     return wikiList
 
 
-cat = "Physics"
-wikiTitles = getCategoryPageList(cat, 2)
+cat = "Historiography"
+wikiTitles = getCategoryPageList(cat, 65)
 wikilist = createWikiList(wikiTitles, cat)
 writeWikipageToFile(wikiTitles, cat)
 
