@@ -29,21 +29,49 @@ def getCategoryPageList(category, amount):
         wikiTitles.append(DATA["query"]['categorymembers'][i]['title'])
     return wikiTitles
 
+def filterWikiData(page):
+    wikiWordlist = filter.remove_all_but_words(page)
+    cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
+    return cleanWikiWordlist
+
 def writeWikipageToFile(wikiTitles, filename):
     ### get single pages
     bigWordList = []
     for i in range(len(wikiTitles)):
         wikiPage = wikipedia.page(wikiTitles[i])
-        wikiWordlist = filter.remove_all_but_words(wikiPage.content)
-        cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
+        cleanWikiWordlist = filterWikiData(wikiPage.content)
+        # wikiPage = wikipedia.page(wikiTitles[i])
+        # wikiWordlist = filter.remove_all_but_words(wikiPage.content)
+        # cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
         for j in range(len(cleanWikiWordlist)):
             bigWordList.append(cleanWikiWordlist[j])
 
     ### write to file
-    file = open(filename + ".txt", "w")
+    file = open("wikidata/" + filename + ".txt", "w")
 
     for word in bigWordList:
         file.write(str(word) + " ")
 
     file.close()
 
+def createWikiList(wikiTitles, category):
+    wikiList = []
+    for i in range(len(wikiTitles)):
+        bigWordList = []
+        wikiPage = wikipedia.page(wikiTitles[i])
+        cleanWikiWordlist = filterWikiData(wikiPage.content)
+        for j in range(len(cleanWikiWordlist)):
+            bigWordList.append(cleanWikiWordlist[j])
+        wikiList.append([bigWordList, category])
+    return wikiList
+
+
+cat = "Physics"
+wikiTitles = getCategoryPageList(cat, 2)
+wikilist = createWikiList(wikiTitles, cat)
+writeWikipageToFile(wikiTitles, cat)
+
+print(wikilist[1][1])
+
+
+## TAKE TOP WORDS OUT OF EVERY CATEGORY
