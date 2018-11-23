@@ -69,8 +69,19 @@ def computeTF_IDF(doclist, IDFdict):
     return tfidf_dicts
 
 
+def ToptfidfWeights(tfidf,N):
+    #res = {}
+    TopTF = []
+    for i in range(len(tfidf)):
+        res=dict(sorted([(k,v) for k, v in tfidf[i].items()], key=lambda x: x[1])[-N:])
+        TopTF.append(res)
+    return TopTF
+    
+
 doclist = tf_idf_init()
 idfs = computeIDF(doclist)
 tfidf = computeTF_IDF(doclist, idfs)
+TopTF = ToptfidfWeights(tfidf,100)
+print(TopTF[2])
 #print(len(tfidf[]))
 # print(tfidf[1])
