@@ -24,27 +24,40 @@ for i in range(len(TopTF)):
 
 #print(idf)
     
+Art = []
+   
 dk = wikipedia.page("Denmark")
+Swe = wikipedia.page("Christianity")
 dk = dk.content
-article = filter.remove_all_but_words(dk)
-article = filter.remove_stopwords(article)
+Swe = Swe.content
+dk = filter.remove_all_but_words(dk)
+dk = filter.remove_stopwords(dk)
+Swe = filter.remove_all_but_words(Swe)
+Swe = filter.remove_stopwords(Swe)
+
+Art.append(dk)
+Art.append(Swe)
 
 #print(len(tfidf[5]))
 
 #print(TopTF[5]["varphi"])
 
-def WordVec1Hot(tfidf,idf,TopTF,testVec, article,No):
+def WordVec1Hot(tfidf,idf,TopTF,testVec, Art,No):
     n = len(tfidf) #Amount of clusters (aka amount of categories in MoD)
     m = No*len(TopTF) #Amount of words in our vocabulary
-    ArtVec = [0]*m
+    ArtVecs = []
     
-    for i in range(len(TopTF)):
-        for j in range(len(TopTF[i])):
-            if list(TopTF[i].keys())[j] in article:
-                ArtVec[j+i*No] = 1
+    for k in range(len(Art)):
+        ArtVec = [0]*m
+        for i in range(len(TopTF)):
+            for j in range(len(TopTF[i])):
+                if list(TopTF[i].keys())[j] in Art[k]:
+                    ArtVec[j+i*No] = 1
+                
+        ArtVecs.append(ArtVec)
                 
         
-    return ArtVec
+    return ArtVecs
 
 
 def computeDist (point, center):
@@ -84,22 +97,28 @@ def K_means(ArtVec,testVec):
     K = len(center)
     
     for i in range(0,100):
-        #for j in range(0,N):
+        for j in range(0,N): #Change this when we have more than 1 article in ArtVec
             dist = {}
             for c in range(0,K):
-                dist[c] = computeDist(ArtVec,center[c])
-            label = computeLabel(ArtVec,center,dist)
+                dist[c] = computeDist(ArtVec[j],center[c])
+            label = computeLabel(ArtVec[j],center,dist)
             center[label[0]] = updateCenter(label[1],center[label[0]])
             
+            if i == 100-1:
+                cluster_lab.append(label)
+            
+            
             
     
     
-    return center
+    return [cluster_lab,center]
 
 
 
-Vec1Hot = WordVec1Hot(tfidf,idf,TopTF,testVec,article,No)
-print(K_means(Vec1Hot,testVec))
+Vec1Hot = WordVec1Hot(tfidf,idf,TopTF,testVec,Art,No)
+test = K_means(Vec1Hot,testVec)
+print(test[0][1][0])
+#print(K_means(Vec1Hot,testVec))
 
 
 
