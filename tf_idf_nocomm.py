@@ -8,11 +8,20 @@ from collections import Counter
 
 
 def tf_idf_init():
-    listofD = ["countData/CultMap.txt","countData/FormSciMap.txt","countData/GeoMap.txt","countData/HistoMap.txt","countData/PersonalLifeMap.txt","countData/PhysicMap.txt","countData/RelMap.txt","countData/SocialSciMap.txt",]
+    listofD = [
+        "countData/Culture.txt",
+        "countData/Formal sciences.txt",
+        "countData/Geography.txt",
+        "countData/Historiography.txt",
+        "countData/Personal life.txt",
+        "countData/Physics.txt",
+        "countData/Religion.txt",
+        "countData/Social Sciences.txt",
+    ]
 
-    doclist = []    
+    doclist = []
     for arg in listofD:
-        wordDict = {}   
+        wordDict = {}
         with open(arg) as f:
             for line in f:
                 # print(line)
@@ -45,11 +54,10 @@ def computeIDF(doclist):
             else:
                 idfDict[word] = 1
 
-    derp = idfDict
     for word, val in idfDict.items():
         idfDict[word] = math.log10(N/float(val))
-        # print(idfDict[word])
-    return derp
+    return idfDict
+
 
 def computeTF_IDF(doclist, IDFdict):
 
@@ -76,12 +84,12 @@ def ToptfidfWeights(tfidf,N):
         res=dict(sorted([(k,v) for k, v in tfidf[i].items()], key=lambda x: x[1])[-N:])
         TopTF.append(res)
     return TopTF
-    
+
 
 doclist = tf_idf_init()
 idfs = computeIDF(doclist)
 tfidf = computeTF_IDF(doclist, idfs)
 TopTF = ToptfidfWeights(tfidf,100)
-print(TopTF[2])
+# print(TopTF[2])
 #print(len(tfidf[]))
 # print(tfidf[1])
