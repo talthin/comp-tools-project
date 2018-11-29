@@ -86,7 +86,7 @@ def ToptfidfWeights(tfidf,N):
     return TopTF
 
 
-doclist = tf_idf_init()
-idfs = computeIDF(doclist)
-tfidf = computeTF_IDF(doclist, idfs)
-TopTF = ToptfidfWeights(tfidf,100)
+# doclist = tf_idf_init()
+# idfs = computeIDF(doclist)
+# tfidf = computeTF_IDF(doclist, idfs)
+# TopTF = ToptfidfWeights(tfidf,100)

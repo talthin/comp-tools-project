@@ -31,8 +31,7 @@ def generateBinaryWordMatrix(topword_matrix, number_of_topwords):
 
 def WordVec1Hot(topword_matrix, testArticles,number_of_topwords):
     m = number_of_topwords*len(topword_matrix) #Amount of words in our vocabulary
-    print("LENGTH", m)
-    print("len(topword_matrix)", len(testArticles))
+    
     ArtVecs = []
 
     for k in range(len(testArticles)):
@@ -91,11 +90,9 @@ def K_means(article_matrix, binary_word_matrix):
     for i in range(0,10):
         for j in range(0,N): #Change this when we have more than 1 article in article_matrix
             dist = {}
-            print(j)
             for c in range(0,K):
                 dist[c] = computeDist(article_matrix[j],center[c])
             label = computeLabel(article_matrix[j],center,dist)
-            print(label[0])
             center[label[0]] = updateCenter(label[1],center[label[0]])
 
             if i == 10-1:

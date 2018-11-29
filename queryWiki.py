@@ -42,45 +42,86 @@ def filterWikiData(page):
 # wikiTitles, the titles you want to fetch content from. filename, what you want the file to be namned
 def writeWikipageToFile(wikiTitles, filename):
     ### get single pages
-    bigWordList = []
+    trainQuantity = int(len(wikiTitles)*0.66)
+    # print(trainQuantity)
+    trainWordList = []
+    testWordList = []
     for i in range(len(wikiTitles)):
-        wikiPage = wikipedia.page(wikiTitles[i])
-        cleanWikiWordlist = filterWikiData(wikiPage.content)
-        # wikiPage = wikipedia.page(wikiTitles[i])
-        # wikiWordlist = filter.remove_all_but_words(wikiPage.content)
-        # cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
-        for j in range(len(cleanWikiWordlist)):
-            bigWordList.append(cleanWikiWordlist[j])
+        if i <= trainQuantity:
+
+            wikiPage = wikipedia.page(wikiTitles[i])
+            cleanWikiWordlist = filterWikiData(wikiPage.content)
+            # wikiPage = wikipedia.page(wikiTitles[i])
+            # wikiWordlist = filter.remove_all_but_words(wikiPage.content)
+            # cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
+            for j in range(len(cleanWikiWordlist)):
+                trainWordList.append(cleanWikiWordlist[j])
+
+            trainWordList.append(":")
+        else:
+            wikiPage = wikipedia.page(wikiTitles[i])
+            cleanWikiWordlist = filterWikiData(wikiPage.content)
+            # wikiPage = wikipedia.page(wikiTitles[i])
+            # wikiWordlist = filter.remove_all_but_words(wikiPage.content)
+            # cleanWikiWordlist = filter.remove_stopwords(wikiWordlist)
+            for j in range(len(cleanWikiWordlist)):
+                testWordList.append(cleanWikiWordlist[j])
+
+            testWordList.append(":")
 
     ### write to file
     file = open("wikidata/" + filename + ".txt", "w")
-
-    for word in bigWordList:
+    for word in trainWordList:
         file.write(str(word) + " ")
-
     file.close()
 
+    file = open("testData/" + filename + ".txt", "w")
+    for word in testWordList:
+        file.write(str(word) + " ")
+    file.close()
+
+def createWikidict(catlist):
+    article_list = []
+    for doc in catlist:
+        article_count = 0
+        with open("testData/" + doc + ".txt") as fh:
+            for line in fh:
+                articles = line.split(":")
+
+        for i in range(len(articles) ):
+            article_dict = {}
+            word_list = articles[i].split(" ")
+            if len(word_list) < 10:
+                continue
+            else:
+                article_dict["txt"] = word_list
+                article_dict["label"] = doc
+                article_list.append(article_dict)
+                article_count += 1
+
+    return article_list
 
 # takes a list of titles and fetches the content of those pages from wikipedia and filters the data and converts it to a list
-# wikiTitles, the titles you want to fetch content from. category, just for labeling the list. 
+# wikiTitles, the titles you want to fetch content from. category, just for labeling the list.
 def createWikiList(wikiTitles, category):
     wikiList = []
+    pageDict = {}
     for i in range(len(wikiTitles)):
         bigWordList = []
         wikiPage = wikipedia.page(wikiTitles[i])
         cleanWikiWordlist = filterWikiData(wikiPage.content)
         for j in range(len(cleanWikiWordlist)):
             bigWordList.append(cleanWikiWordlist[j])
-        wikiList.append([bigWordList, category])
+        pageDict["text"] = bigWordList
+        pageDict["label"] = category
+        # wikiList.append([bigWordList, category])
+        wikiList.append(pageDict)
     return wikiList
 
 
-cat = "Historiography"
-wikiTitles = getCategoryPageList(cat, 65)
-wikilist = createWikiList(wikiTitles, cat)
-writeWikipageToFile(wikiTitles, cat)
+# cat = "Social sciences"
+# wikiTitles = getCategoryPageList(cat, 200)
+# # wikilist = createWikiList(wikiTitles, cat)
+# writeWikipageToFile(wikiTitles, cat)
 
-print(wikilist[1][1])
-
-
-## TAKE TOP WORDS OUT OF EVERY CATEGORY
+# print(wikilist[0])
