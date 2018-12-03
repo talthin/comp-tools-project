@@ -11,14 +11,11 @@ for arg in sys.argv[1:]:
     wordDict = {}
     with open(arg) as f:
         for line in f:
-            # print(line)
             (key, val) = line.split()
             wordDict[key] = int(val)
     doclist.append(wordDict)
 
-# d = {}
-# d2 = {}
-
+# dont need tf because we already count word frequency
 # def computeTF(wordDict):
 #     tfdict = {}
 #     dictCount = len(wordDict)
@@ -41,7 +38,6 @@ def computeIDF(doclist):
 
     for word, val in idfDict.items():
         idfDict[word] = math.log10(N/float(val))
-        # print(idfDict[word])
     return idfDict
 
 def computeTF_IDF(doclist, IDFdict):
@@ -53,7 +49,6 @@ def computeTF_IDF(doclist, IDFdict):
     for wdict in tfidf_dicts:
         for word, val in wdict.items():
             wdict[word] = val * IDFdict[word]
-
     # tfidf = {}
     # unionSet = dict(Counter(doclist[0]) + Counter(doclist[1]))
     # for word, val in unionSet.items():
@@ -62,8 +57,14 @@ def computeTF_IDF(doclist, IDFdict):
     return tfidf_dicts
 
 
+def topWordsTf_IDF(tf_idf,amount):
+    sortedTf_IDF = sorted(tf_idf, key=tf_idf.get, reverse=True)
+    topWords = sortedTf_IDF[:amount]
+    return topWords
 
 idfs = computeIDF(doclist)
 tfidf = computeTF_IDF(doclist, idfs)
-print(tfidf)
+topwords = topWordsTf_IDF(tfidf[6], 20)
+
+print(topwords)
 # print(tfidf[1])

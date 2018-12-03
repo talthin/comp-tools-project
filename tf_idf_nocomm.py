@@ -85,6 +85,30 @@ def ToptfidfWeights(tfidf,N):
         TopTF.append(res)
     return TopTF
 
+def calculate_hitrate(label_list, result_list):
+
+    hit = 0
+    for j in range(len(label_list)):
+        if label_list[j] == "Culture" and result_list[j] == 0:
+            hit += 1
+        if label_list[j] == "Formal sciences" and result_list[j] == 1:
+            hit += 1
+        if label_list[j] == "Geography" and result_list[j] == 2:
+            hit += 1
+        if label_list[j] == "Historiography" and result_list[j] == 3:
+            hit += 1
+        if label_list[j] == "Personal life" and result_list[j] == 4:
+            hit += 1
+        if label_list[j] == "Physics" and result_list[j] == 5:
+            hit += 1
+        if label_list[j] == "Religion" and result_list[j] == 6:
+            hit += 1
+        if label_list[j] == "Social Sciences" and result_list[j] == 7:
+            hit += 1
+    hit_precentage = float(hit / len(label_list))
+
+    return hit_precentage
+
 
 # doclist = tf_idf_init()
 # idfs = computeIDF(doclist)

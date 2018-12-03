@@ -44,6 +44,11 @@ result = clusterstuff.tf_idf_classifier(tfidf_dicts, idf_dicts, testArticles)
 print(labellist)
 print(result)
 
+# TODO CALCULATE HOW GOOOD YOU GUESS CATEGORIES
+
+hit_precentage = tf_idf_nocomm.calculate_hitrate(labellist, result)
+print(hit_precentage)
+
 # binary_word_matrix = K_means_clustering.generateBinaryWordMatrix(
 #     topword_matrix, topwords)
 
