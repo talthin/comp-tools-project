@@ -7,14 +7,14 @@ Created on Thu Dec  6 10:21:39 2018
 
 import matplotlib.pyplot as plt
 
-plt.plot(KMacc)
-plt.plot(DBacc)
+plt.plot(topword_i, KMacc, color='b')
+plt.plot(topword_i, DBacc, color='r')
 plt.ylabel("Accuracy")
 plt.xlabel("Amount of top words")
 plt.show()
 
-plt.plot(time_K)
-plt.plot(time_DB)
+plt.plot(topword_i, time_K, color='b')
+plt.plot(topword_i, time_DB, color='r')
 plt.ylabel("Computational time")
 plt.xlabel("Amount of top words")
 plt.show()

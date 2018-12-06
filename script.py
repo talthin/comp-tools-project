@@ -94,6 +94,6 @@ print("DBSCAN accuracy: " + str(max(DBacc)))
 print("Number of topwords for K-Means: " + str(KMacc.index(max(KMacc))+8))
 print("Number of topwords for DBSCAN: " + str(DBacc.index(max(DBacc))+8))
 
-print("Computational time for K-Means: " + str(tf_time))
+print("Computational time for tf-idf: " + str(tf_time))
 print("Computational time for K-Means: " + str(time_K[KMacc.index(max(KMacc))]))
 print("Computational time for DBSCAN: " + str(time_DB[DBacc.index(max(DBacc))]))
