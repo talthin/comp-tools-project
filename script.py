@@ -8,6 +8,8 @@ import filter
 import queryWiki
 import clusterstuff
 import DBSCAN
+import matplotlib.pyplot as plt
+import time
 
 categoryList = [
     "Culture", "Formal sciences", "Geography", "Historiography",
@@ -42,7 +44,10 @@ topword_i = []
 tfidfacc = []
 KMacc = []
 DBacc = []
+time_K = []
+time_DB = []
 for topwords in range(8,200):
+    start_time = time.clock()
     topword_matrix = tf_idf_nocomm.ToptfidfWeights(tfidf_dicts, topwords)
     binary_topword_matrix  = K_means_clustering.generateBinaryWordMatrix(topword_matrix,topwords)
 
@@ -51,12 +56,20 @@ for topwords in range(8,200):
 # testArticles = []
 
     binary_articles = K_means_clustering.WordVec1Hot(topword_matrix,testArticles,topwords)
-
+    init_time = time.clock()-start_time
 #print(binary_articles[100].count(1))
 
 #result = clusterstuff.tf_idf_classifier(tfidf_dicts, idf_dicts, testArticles)
-    resultDB = DBSCAN.DBSCAN(binary_articles,binary_topword_matrix,200,10)
+    start_time_DB = time.clock()
+    resultDB = DBSCAN.DBSCAN(binary_articles,binary_topword_matrix,1/len(binary_topword_matrix),len(binary_articles)/len(binary_topword_matrix))
+    DB_time = time.clock()+init_time-start_time_DB
+    
+    start_time_K = time.clock()
     resultKM = K_means_clustering.K_means(binary_articles,binary_topword_matrix)
+    K_time = time.clock()+init_time-start_time_K
+    
+    time_K.append(K_time)
+    time_DB.append(DB_time)
 #print(resultDB)
 #print(labellist)
 #print(result)
@@ -66,38 +79,40 @@ for topwords in range(8,200):
 #hit_precentage = tf_idf_nocomm.calculate_hitrate(labellist, result)
     hit_precentageKM = tf_idf_nocomm.calculate_hitrate(labellist,resultKM)
     hit_precentageDB = tf_idf_nocomm.calculate_hitrate(labellist,resultDB)
-    tfidfacc.append(hit_precentage)
+    #tfidfacc.append(hit_percentage)
     KMacc.append(hit_precentageKM)
     DBacc.append(hit_precentageDB)
     topword_i.append(topwords)
     print(topwords)
-print("TF-IDF Score accuracy: " + str(hit_precentage))
-print("K-means accuracy: " + str(hit_precentageKM))
-print("DBSCAN accuracy: " + str(hit_precentageDB))
-
-score = 0
-finalTW = 0
-for i in range(0,len(topword_i)):
-    tempscore = 0
-    tempscore = tfidfacc[i]+KMacc[i]+DBacc[i]
-    if score == 0:
-        score = tempscore
-        finalTW = i
-    elif tempscore > score:
-        score = tempscore
-        finalTW = i
-
-import matplotlib.pyplot as plt
 
 plt.plot(KMacc)
 plt.plot(DBacc)
 plt.ylabel("Accuracy")
 plt.xlabel("Amount of top words")
 plt.show()
-        
-print(score)
-print(finalTW)
-print(finalTW+8)
+
+plt.plot(time_K)
+plt.plot(time_DB)
+plt.ylabel("Computational time")
+plt.xlabel("Amount of top words")
+plt.show()
+
+tf_start = time.clock()
+result = clusterstuff.tf_idf_classifier(tfidf_dicts, idf_dicts, testArticles)
+hit_percentage = tf_idf_nocomm.calculate_hitrate(labellist, result)
+tf_time = time.clock()-tf_start
+
+print("TF-IDF Score accuracy: " + str(hit_percentage))
+print("K-means accuracy: " + str(max(KMacc)))
+print("DBSCAN accuracy: " + str(max(DBacc)))
+print("Number of topwords for K-Means: " + str(KMacc.index(max(KMacc))+8))
+print("Number of topwords for DBSCAN: " + str(DBacc.index(max(DBacc))+8))
+
+print("Computational time for K-Means: " + str(tf_time))
+print("Computational time for K-Means: " + str(time_K[KMacc.index(max(KMacc))]))
+print("Computational time for DBSCAN: " + str(time_DB[DBacc.index(max(KMacc))]))
+
+
 
 # binary_word_matrix = K_means_clustering.generateBinaryWordMatrix(
 #     topword_matrix, topwords)

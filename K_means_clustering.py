@@ -2,20 +2,6 @@ import tf_idf_nocomm
 import filter
 import wikipedia
 
-# Art = []
-
-# dk = wikipedia.page("Denmark")
-# Swe = wikipedia.page("Christianity")
-# dk = dk.content
-# Swe = Swe.content
-# dk = filter.remove_all_but_words(dk)
-# dk = filter.remove_stopwords(dk)
-# Swe = filter.remove_all_but_words(Swe)
-# Swe = filter.remove_stopwords(Swe)
-
-# Art.append(dk)
-# Art.append(Swe)
-
 
 
 def generateBinaryWordMatrix(topword_matrix, number_of_topwords):
