@@ -75,7 +75,7 @@ def updateCenter(cluster_lab,center,len_train):
     # print("hey4")
     for i in range(len(center)):
         # print(cluster_lab[i])
-        newCenter[i] = (center[i]*len_train+cluster_lab[i])/(lentrain+1)
+        newCenter[i] = (center[i]*len_train+cluster_lab[i])/(len_train+1)
     return newCenter
 
 def K_means(article_matrix, binary_word_matrix):
@@ -85,7 +85,7 @@ def K_means(article_matrix, binary_word_matrix):
     cluster_lab =[]
     N = len(article_matrix)
     K = len(center)
-    len_train = N*2
+    len_train = N*100
     num_iter = 10
 
     for i in range(0,num_iter):
@@ -97,7 +97,7 @@ def K_means(article_matrix, binary_word_matrix):
             center[label[0]] = updateCenter(label[1],center[label[0]],len_train)
             len_train += 1
 
-            if i == num__iter-1:
+            if i == num_iter-1:
                 cluster_lab.append(label[0])
 
 
