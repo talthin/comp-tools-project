@@ -69,14 +69,13 @@ def computeLabel (ArtVec,center,dist):
     # print("hey3")
     return [idx_min,ArtVec,center[idx_min]]
 
-def updateCenter(cluster_lab,center):
+def updateCenter(cluster_lab,center,len_train):
     newCenter = [0]*len(center)
+    
     # print("hey4")
-    w_centers = 100  #Weight is 50 as the centers are built on a lot of articles
     for i in range(len(center)):
         # print(cluster_lab[i])
-        newCenter[i] = (center[i]*0.98+cluster_lab[i]*0.02)
-
+        newCenter[i] = (center[i]*len_train+cluster_lab[i])/(len_train+1)
     return newCenter
 
 def K_means(article_matrix, binary_word_matrix):
@@ -86,17 +85,20 @@ def K_means(article_matrix, binary_word_matrix):
     cluster_lab =[]
     N = len(article_matrix)
     K = len(center)
+    len_train = N*100
+    num_iter = 10
 
-    for i in range(0,10):
+    for i in range(0,num_iter):
         for j in range(0,N): #Change this when we have more than 1 article in article_matrix
             dist = {}
             for c in range(0,K):
                 dist[c] = computeDist(article_matrix[j],center[c])
             label = computeLabel(article_matrix[j],center,dist)
-            center[label[0]] = updateCenter(label[1],center[label[0]])
+            center[label[0]] = updateCenter(label[1],center[label[0]],len_train)
+            len_train += 1
 
-            if i == 10-1:
-                cluster_lab.append(label)
+            if i == num_iter-1:
+                cluster_lab.append(label[0])
 
 
 
