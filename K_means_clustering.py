@@ -85,7 +85,7 @@ def K_means(article_matrix, binary_word_matrix):
     cluster_lab =[]
     N = len(article_matrix)
     K = len(center)
-    len_train = N*100
+    len_train = N*2
     num_iter = 10
 
     for i in range(0,num_iter):

@@ -42,23 +42,21 @@ topword_i = []
 tfidfacc = []
 KMacc = []
 DBacc = []
-topwords = 104
-#for topwords in range(8,200):
-topword_matrix = tf_idf_nocomm.ToptfidfWeights(tfidf_dicts, topwords)
-binary_topword_matrix  = K_means_clustering.generateBinaryWordMatrix(topword_matrix,topwords)
-    #print(topword_matrix)
+for topwords in range(8,200):
+    topword_matrix = tf_idf_nocomm.ToptfidfWeights(tfidf_dicts, topwords)
+    binary_topword_matrix  = K_means_clustering.generateBinaryWordMatrix(topword_matrix,topwords)
 
 # print(topword_matrix[0])
 ## filter testarticles
 # testArticles = []
 
-binary_articles = K_means_clustering.WordVec1Hot(topword_matrix,testArticles,topwords)
+    binary_articles = K_means_clustering.WordVec1Hot(topword_matrix,testArticles,topwords)
 
 #print(binary_articles[100].count(1))
 
 #result = clusterstuff.tf_idf_classifier(tfidf_dicts, idf_dicts, testArticles)
-resultDB = DBSCAN.DBSCAN(binary_articles,binary_topword_matrix,200,10)
-#resultKM = K_means_clustering.K_means(binary_articles,binary_topword_matrix)
+    resultDB = DBSCAN.DBSCAN(binary_articles,binary_topword_matrix,200,10)
+    resultKM = K_means_clustering.K_means(binary_articles,binary_topword_matrix)
 #print(resultDB)
 #print(labellist)
 #print(result)
@@ -66,31 +64,40 @@ resultDB = DBSCAN.DBSCAN(binary_articles,binary_topword_matrix,200,10)
 # TODO CALCULATE HOW GOOOD YOU GUESS CATEGORIES
 
 #hit_precentage = tf_idf_nocomm.calculate_hitrate(labellist, result)
-#hit_precentageKM = tf_idf_nocomm.calculate_hitrate(labellist,resultKM)
-hit_precentageDB = tf_idf_nocomm.calculate_hitrate(labellist,resultDB)
-    #tfidfacc.append(hit_precentage)
-    #KMacc.append(hit_precentageKM)
-    #DBacc.append(hit_precentageDB)
-    #topword_i.append(topwords)
+    hit_precentageKM = tf_idf_nocomm.calculate_hitrate(labellist,resultKM)
+    hit_precentageDB = tf_idf_nocomm.calculate_hitrate(labellist,resultDB)
+    tfidfacc.append(hit_precentage)
+    KMacc.append(hit_precentageKM)
+    DBacc.append(hit_precentageDB)
+    topword_i.append(topwords)
+    print(topwords)
 print("TF-IDF Score accuracy: " + str(hit_precentage))
 print("K-means accuracy: " + str(hit_precentageKM))
 print("DBSCAN accuracy: " + str(hit_precentageDB))
 
-#score = 0
-#finalTW = 0
-#for i in range(0,len(topword_i)):
-#    tempscore = 0
-#    tempscore = tfidfacc[i]+KMacc[i]+DBacc[i]
-#    if score == 0:
-#        score = tempscore
-#        finalTW = i
-#    elif tempscore > score:
-#        score = tempscore
-#        finalTW = i
+score = 0
+finalTW = 0
+for i in range(0,len(topword_i)):
+    tempscore = 0
+    tempscore = tfidfacc[i]+KMacc[i]+DBacc[i]
+    if score == 0:
+        score = tempscore
+        finalTW = i
+    elif tempscore > score:
+        score = tempscore
+        finalTW = i
+
+import matplotlib.pyplot as plt
+
+plt.plot(KMacc)
+plt.plot(DBacc)
+plt.ylabel("Accuracy")
+plt.xlabel("Amount of top words")
+plt.show()
         
-#print(score)
-#print(finalTW)
-#print(finalTW+8)
+print(score)
+print(finalTW)
+print(finalTW+8)
 
 # binary_word_matrix = K_means_clustering.generateBinaryWordMatrix(
 #     topword_matrix, topwords)
