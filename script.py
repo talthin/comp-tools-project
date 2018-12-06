@@ -38,8 +38,6 @@ for i in range(len(testDataArticleList)):
     testArticles.append(testDataArticleList[i]["txt"])
     
 
-
-#topwords = 104
 topword_i = []
 tfidfacc = []
 KMacc = []
@@ -51,15 +49,10 @@ for topwords in range(8,200):
     topword_matrix = tf_idf_nocomm.ToptfidfWeights(tfidf_dicts, topwords)
     binary_topword_matrix  = K_means_clustering.generateBinaryWordMatrix(topword_matrix,topwords)
 
-# print(topword_matrix[0])
-## filter testarticles
-# testArticles = []
 
     binary_articles = K_means_clustering.WordVec1Hot(topword_matrix,testArticles,topwords)
     init_time = time.clock()-start_time
-#print(binary_articles[100].count(1))
 
-#result = clusterstuff.tf_idf_classifier(tfidf_dicts, idf_dicts, testArticles)
     start_time_DB = time.clock()
     resultDB = DBSCAN.DBSCAN(binary_articles,binary_topword_matrix,1/len(binary_topword_matrix),len(binary_articles)/len(binary_topword_matrix))
     DB_time = time.clock()+init_time-start_time_DB
@@ -70,16 +63,9 @@ for topwords in range(8,200):
     
     time_K.append(K_time)
     time_DB.append(DB_time)
-#print(resultDB)
-#print(labellist)
-#print(result)
 
-# TODO CALCULATE HOW GOOOD YOU GUESS CATEGORIES
-
-#hit_precentage = tf_idf_nocomm.calculate_hitrate(labellist, result)
     hit_precentageKM = tf_idf_nocomm.calculate_hitrate(labellist,resultKM)
     hit_precentageDB = tf_idf_nocomm.calculate_hitrate(labellist,resultDB)
-    #tfidfacc.append(hit_percentage)
     KMacc.append(hit_precentageKM)
     DBacc.append(hit_precentageDB)
     topword_i.append(topwords)
@@ -110,16 +96,4 @@ print("Number of topwords for DBSCAN: " + str(DBacc.index(max(DBacc))+8))
 
 print("Computational time for K-Means: " + str(tf_time))
 print("Computational time for K-Means: " + str(time_K[KMacc.index(max(KMacc))]))
-print("Computational time for DBSCAN: " + str(time_DB[DBacc.index(max(KMacc))]))
-
-
-
-# binary_word_matrix = K_means_clustering.generateBinaryWordMatrix(
-#     topword_matrix, topwords)
-
-# article_matrix = K_means_clustering.WordVec1Hot(topword_matrix, testArticles,
-#                                                 topwords)
-# result = K_means_clustering.K_means(article_matrix, binary_word_matrix)
-
-# for i in range(len(result)):
-#     print(result[i][1][0])
+print("Computational time for DBSCAN: " + str(time_DB[DBacc.index(max(DBacc))]))

@@ -13,7 +13,7 @@ plt.ylabel("Accuracy")
 plt.xlabel("Amount of top words")
 plt.show()
 
-plt.plot(time_K
+plt.plot(time_K)
 plt.plot(time_DB)
 plt.ylabel("Computational time")
 plt.xlabel("Amount of top words")
@@ -32,4 +32,4 @@ print("Number of topwords for DBSCAN: " + str(DBacc.index(max(DBacc))+8))
 
 print("Computational time for K-Means: " + str(tf_time))
 print("Computational time for K-Means: " + str(time_K[KMacc.index(max(KMacc))]))
-print("Computational time for DBSCAN: " + str(time_DB[DBacc.index(max(KMacc))]))
+print("Computational time for DBSCAN: " + str(time_DB[DBacc.index(max(DBacc))]))

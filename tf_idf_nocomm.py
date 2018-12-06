@@ -167,22 +167,6 @@ def calculate_hitrate(label_list, result_list):
                 soc_sci_hit += 1
     hit = culhit + for_sci_hit + geo_hit + his_hit + per_life_hit + phy_hit + rel_hit + soc_sci_hit
     hit_precentage = float(hit / len(label_list))
-    print("Culture articles: " + str(culcount))
-    print("Culture hitrate: " + str(culhit/culcount))
-    print("Formal sciences  articles: " + str(for_sci_count))
-    print("Formal sciences hitrate: " + str(for_sci_hit / for_sci_count))
-    print("Geography articles: " + str(geo_count))
-    print("Geography hitrate: " + str(geo_hit / geo_count))
-    print("Historiography articles: " + str(his_count))
-    print("Historiography hitrate: " + str(his_hit / his_count))
-    print("Personal life  articles: " + str(per_life_count))
-    print("Personal life hitrate: " + str(per_life_hit / per_life_count))
-    print("Physics  articles: " + str(phy_count))
-    print("Physics hitrate: " + str(phy_hit / phy_count))
-    print("Religion  articles: " + str(rel_count))
-    print("Religion hitrate: " + str(rel_hit / rel_count))
-    print("Social Sciences  articles: " + str(soc_sci_count))
-    print("Social Sciences hitrate: " + str(soc_sci_hit / soc_sci_count))
     return hit_precentage
 
 # doclist = tf_idf_init()
