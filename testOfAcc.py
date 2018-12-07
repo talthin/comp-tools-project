@@ -20,7 +20,8 @@ plt.xlabel("Amount of top words")
 plt.show()
 
 tf_start = time.clock()
-result = clusterstuff.tf_idf_classifier(tfidf_dicts, idf_dicts, testArticles)
+result = tf_idf_classifier.tf_idf_classifier(tfidf_dicts, idf_dicts,
+                                             testArticles)
 hit_percentage = tf_idf_nocomm.calculate_hitrate(labellist, result)
 tf_time = time.clock()-tf_start
 

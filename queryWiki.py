@@ -1,7 +1,6 @@
 import requests
 import wikipedia
 import filter
-import wordCount
 from collections import defaultdict
 
 # Fetches a list of pages from wikipedia based on a category.
