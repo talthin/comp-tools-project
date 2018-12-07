@@ -44,7 +44,9 @@ KMacc = []
 DBacc = []
 time_K = []
 time_DB = []
-for topwords in range(8,200):
+result_KM = []
+result_DB = []
+for topwords in range(8,13):
     start_time = time.clock()
     topword_matrix = tf_idf_nocomm.ToptfidfWeights(tfidf_dicts, topwords)
     binary_topword_matrix  = K_means_clustering.generateBinaryWordMatrix(topword_matrix,topwords)
@@ -63,6 +65,9 @@ for topwords in range(8,200):
     
     time_K.append(K_time)
     time_DB.append(DB_time)
+    
+    result_DB.append(resultDB)
+    result_KM.append(resultKM)
 
     hit_precentageKM = tf_idf_nocomm.calculate_hitrate(labellist,resultKM)
     hit_precentageDB = tf_idf_nocomm.calculate_hitrate(labellist,resultDB)
@@ -71,14 +76,14 @@ for topwords in range(8,200):
     topword_i.append(topwords)
     print(topwords)
 
-plt.plot(KMacc)
-plt.plot(DBacc)
+plt.plot(topword_i, KMacc, color='b')
+plt.plot(topword_i, DBacc, color='r')
 plt.ylabel("Accuracy")
 plt.xlabel("Amount of top words")
 plt.show()
 
-plt.plot(time_K)
-plt.plot(time_DB)
+plt.plot(topword_i, time_K, color='b')
+plt.plot(topword_i, time_DB, color='r')
 plt.ylabel("Computational time")
 plt.xlabel("Amount of top words")
 plt.show()
@@ -94,6 +99,6 @@ print("DBSCAN accuracy: " + str(max(DBacc)))
 print("Number of topwords for K-Means: " + str(KMacc.index(max(KMacc))+8))
 print("Number of topwords for DBSCAN: " + str(DBacc.index(max(DBacc))+8))
 
-print("Computational time for tf-idf: " + str(tf_time))
+print("Computational time for K-Means: " + str(tf_time))
 print("Computational time for K-Means: " + str(time_K[KMacc.index(max(KMacc))]))
 print("Computational time for DBSCAN: " + str(time_DB[DBacc.index(max(DBacc))]))
