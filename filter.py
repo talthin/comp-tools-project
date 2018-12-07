@@ -14,7 +14,6 @@ def remove_all_but_words(word_string):
 
 ### takes a list of words and removes all stop words.
 def remove_stopwords(wordlist):
-    # print(len(wordlist))
     stop = [x.lower() for x in set(stopwords.words('english'))]
     lowercase_wordlist = [lw.lower() for lw in wordlist]
     filtered_wordlist = [

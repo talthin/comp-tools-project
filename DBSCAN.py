@@ -30,8 +30,6 @@ def RangeQuery(ArtVec,centerVec,eps):
         tempL = tempL/len(ArtVec[i])
         if tempL <= eps:
             Neigh.append(i)
-        #print(i, tempL)
-    #print(derp/16)
     return Neigh
 
 def DBSCAN(ArtVec,testVec,eps,minPts):
@@ -46,7 +44,6 @@ def DBSCAN(ArtVec,testVec,eps,minPts):
         
 
 def expand(ArtVec,testVec,C,eps,minPts,label,Neigh):
-       # label[i] = C
         
         for j in Neigh:
             if label[j] == None:
@@ -57,7 +54,6 @@ def expand(ArtVec,testVec,C,eps,minPts,label,Neigh):
             label[j] = C
             Neighj = RangeQuery(ArtVec,ArtVec[j],eps)
             if len(Neighj)*0.1 >= minPts:
-               # print("hej")
                 Neigh += Neighj
                     
 

@@ -83,7 +83,6 @@ def writeWikipageToFile(wikiTitles, filename):
 def createWikidict(catlist):
     article_list = []
     for doc in catlist:
-        article_count = 0
         with open("testData/" + doc + ".txt") as fh:
             for line in fh:
                 articles = line.split(":")
@@ -97,8 +96,6 @@ def createWikidict(catlist):
                 article_dict["txt"] = word_list
                 article_dict["label"] = doc
                 article_list.append(article_dict)
-                article_count += 1
-
     return article_list
 
 # takes a list of titles and fetches the content of those pages from wikipedia and filters the data and converts it to a list

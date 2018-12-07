@@ -1,4 +1,4 @@
-
+from collections import defaultdict
 class WordCount:
     
     def __init__ (self,article):
