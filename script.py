@@ -6,7 +6,7 @@ import K_means_clustering
 import wikipedia
 import filter
 import queryWiki
-import clusterstuff
+import tf_idf_classifier
 import DBSCAN
 import matplotlib.pyplot as plt
 import time
@@ -19,12 +19,12 @@ categoryList = [
 testDataArticleList = queryWiki.createWikidict(categoryList)
 
 
-# for cat in categoryList:
+for cat in categoryList:
 
-#     myinput = open('wikidata/' + cat + '.txt')
-#     myoutput = open('countData/' + cat + '.txt', 'w')
-#     p = subprocess.call(['python3','mapping.py'], stdin=myinput, stdout=myoutput)
-#     myoutput.flush()
+    myinput = open('wikidata/' + cat + '.txt')
+    myoutput = open('countData/' + cat + '.txt', 'w')
+    p = subprocess.call(['python3','mapping.py'], stdin=myinput, stdout=myoutput)
+    myoutput.flush()
 
 
 doclist = tf_idf_nocomm.tf_idf_init()
@@ -36,7 +36,7 @@ labellist = []
 for i in range(len(testDataArticleList)):
     labellist.append(testDataArticleList[i]["label"])
     testArticles.append(testDataArticleList[i]["txt"])
-    
+
 
 topword_i = []
 tfidfacc = []
@@ -58,14 +58,14 @@ for topwords in range(8,13):
     start_time_DB = time.clock()
     resultDB = DBSCAN.DBSCAN(binary_articles,binary_topword_matrix,1/len(binary_topword_matrix),len(binary_articles)/len(binary_topword_matrix))
     DB_time = time.clock()+init_time-start_time_DB
-    
+
     start_time_K = time.clock()
     resultKM = K_means_clustering.K_means(binary_articles,binary_topword_matrix)
     K_time = time.clock()+init_time-start_time_K
-    
+
     time_K.append(K_time)
     time_DB.append(DB_time)
-    
+
     result_DB.append(resultDB)
     result_KM.append(resultKM)
 
@@ -89,7 +89,8 @@ plt.xlabel("Amount of top words")
 plt.show()
 
 tf_start = time.clock()
-result = clusterstuff.tf_idf_classifier(tfidf_dicts, idf_dicts, testArticles)
+result = tf_idf_classifier.tf_idf_classifier(tfidf_dicts, idf_dicts,
+                                             testArticles)
 hit_percentage = tf_idf_nocomm.calculate_hitrate(labellist, result)
 tf_time = time.clock()-tf_start
 
